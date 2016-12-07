@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.PrivilegeMapper">
+	
+	
+	<select id="getAllPrivilege"   resultType="com.model.authority.U_privilege">
+		<![CDATA[select * from U_PRIVILIGE]]>
+	</select>
+	
+	<select id="getPrivilegeByUser"   resultType="com.model.authority.U_privilege">
+		<![CDATA[
+		SELECT up.* FROM U_USER uu,U_USER_PRIVILIGE uup,U_PRIVILIGE up where uu.USER_ID=uup.USER_ID and
+ 		uu.USER_ID=#{user_id} and up.PRIVILEGE_ID=uup.PRIVILEGE_ID 
+		]]>
+	</select>
+	
+	<select id="getPrivilegeByDepartment"   resultType="com.model.authority.U_privilege">
+		<![CDATA[
+		select up.* from u_department ud, u_department_privilige udp, u_privilige up
+		where ud.department_id = udp.department_id and udp.privilege_id = up.privilege_id
+		  and ud.department_id = #{department_id,jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<select id="getRolePrivilegeByUser" resultType="java.util.HashMap">
+		<![CDATA[
+		select U_PRIVILIGE.PRIVILEGE_ID, U_PRIVILIGE.DISPLAY_NAME PRIVI_NAME, U_ROLE.DISPLAY_NAME ROLE_NAME   
+				from U_ROLE, U_USER_ROLE, U_ROLE_PRIVILIGE, U_PRIVILIGE 
+				where  U_USER_ROLE.ROLE_ID=U_ROLE_PRIVILIGE.ROLE_ID and 
+				U_PRIVILIGE.PRIVILEGE_ID = U_ROLE_PRIVILIGE.PRIVILEGE_ID and 
+				U_ROLE.ROLE_ID = U_USER_ROLE.ROLE_ID and 
+				U_USER_ROLE.USER_ID = #{user_id}
+		]]>
+	</select>
+	
+	
+	<insert id="insertPrivilege">
+	<![CDATA[
+		insert into U_PRIVILIGE(PRIVILEGE_ID, PRIVILEGE_NAME, DISPLAY_NAME, MEMO) 
+	 		values(#{privilege_id,jdbcType=VARCHAR},#{privilege_name,jdbcType=VARCHAR},#{display_name,jdbcType=VARCHAR},#{memo,jdbcType=VARCHAR})
+		
+	]]>
+	</insert>
+ 
+ 
+</mapper>

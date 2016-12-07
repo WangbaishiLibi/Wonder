@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.UserDao">
+	
+	<select id="findUserById" resultType="com.entity.User">
+	<![CDATA[
+ 		select * from u_user where user_id=#{user_id, jdbcType=VARCHAR}
+ 	]]>
+ 	</select>
+	
+	<select id="findAllUser" resultType="com.entity.User">
+	<![CDATA[
+		select * from u_user
+	]]>
+	</select>
+	
+
+		<!-- mybtis 中的模糊查询 -->
+	<delete id="deleteUserById">
+ 		delete from U_USER where user_id=#{user_id, jdbcType=VARCHAR}
+ 	</delete>
+	
+	<select id="existUserByEmpno"   resultType="com.model.authority.U_user">
+		<![CDATA[select * from u_user where empno=#{empno,jdbcType=VARCHAR}]]>
+	</select>
+	
+	<select id="getUserByKey"   resultType="com.model.authority.U_user">
+		<![CDATA[
+		select * from U_USER where EMPNO LIKE #{key} OR EMPNAME LIKE #{key}
+		]]>
+	</select>
+	
+	<select id="getUserByName"   resultType="com.model.authority.U_user">
+		<![CDATA[select * from u_user where empno=#{empno,jdbcType=VARCHAR}]]>
+	</select>
+	
+	<select id="getUserById"   resultType="com.model.authority.U_user">
+		<![CDATA[select * from u_user where user_id=#{user_id,jdbcType=VARCHAR}]]>
+	</select>
+	
+	<select id="getUserByDepartmentId"   resultType="com.model.authority.U_user">
+		<![CDATA[select * from u_user where department_id=#{department_id,jdbcType=VARCHAR}]]>
+	</select>
+	
+	<select id="getRoleByUserId"   resultType="com.model.authority.U_role">
+		<![CDATA[
+		(select ur.* from u_user uu, u_user_role uur, u_role ur 
+		  where uu.user_id=uur.user_id
+					and uur.role_id = ur.role_id and uu.user_id = #{user_id,jdbcType=VARCHAR})
+		UNION 
+		(select  ur.* from u_user uu, u_department ud, u_department_role udr, u_role ur 
+		  where uu.department_id = ud.department_id and ud.department_id = udr.department_id and udr.role_id = ur.role_id
+					 and uu.user_id = #{user_id,jdbcType=VARCHAR})
+		
+		]]>
+	</select>
+	<select id="getUserRoleByUserId"   resultType="com.model.authority.U_role">
+		<![CDATA[
+		select ur.* from u_user_role uur, u_role ur 
+		  where  uur.role_id = ur.role_id and uur.user_id = #{user_id,jdbcType=VARCHAR}	
+		]]>
+	</select>
+	
+	<select id="getAllUser"   resultType="com.model.authority.U_user">
+		<![CDATA[select * from u_user]]>
+	</select>
+	<select id="getSpecialUser"   resultType="com.model.authority.U_user">
+		<![CDATA[select uu.* from u_user uu, u_user_role uur, u_role ur 
+				where uu.user_id = uur.user_id and uur.role_id = ur.role_id
+				and (ur.role_name='duanzhang' or ur.role_name='zhuren' or ur.role_name='zhuren_d')]]>
+	</select>
+	<select id="getSpecialUserByRole"   resultType="com.model.authority.U_user">
+		<![CDATA[select distinct uu.* from u_user uu, u_user_role uur, u_role ur, u_department_role udr 
+				where ((uu.user_id = uur.user_id and uur.role_id = ur.role_id) or 
+				(uu.department_id = udr.department_id and udr.role_id = ur.role_id and ur.role_name=#{0}))
+				and ur.role_name = #{0} and uu.user_id = #{1}
+		]]>
+	</select>
+	
+	
+	<update id="updateUser" parameterType="com.model.authority.U_user">
+		update u_user set EMPNAME = #{empname,jdbcType=VARCHAR},  EMPNO = #{empno,jdbcType=VARCHAR},
+			DEPARTMENT_ID = #{department_id,jdbcType=VARCHAR},  EMAIL = #{email,jdbcType=VARCHAR},
+			RANK = #{rank,jdbcType=VARCHAR},  QQ = #{qq,jdbcType=VARCHAR}
+		where USER_ID = #{user_id,jdbcType=VARCHAR}
+	</update>
+	<insert id="insertUser" parameterType="com.model.authority.U_user">
+	<![CDATA[
+		insert into U_USER(USER_ID, DEPARTMENT_ID, PASSWORD, EMPNAME, EMPNO, 
+						   STATUS, RANK, EMAIL, QQ, REGISTER_TIME,  LAST_LOGIN_TIME, MEMO) 
+	 		values(#{user_id,jdbcType=VARCHAR},#{department_id,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+	 			   #{empname,jdbcType=VARCHAR},#{empno,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+	 			   #{rank,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{qq,jdbcType=VARCHAR},
+	 			   #{register_time,jdbcType=VARCHAR},#{last_login_time,jdbcType=VARCHAR},#{memo,jdbcType=VARCHAR})
+		
+	]]>
+	</insert>
+	
+	<select id="getPrivilege" parameterType="String" resultType="com.model.authority.U_privilege">
+	<![CDATA[
+		(SELECT up.* FROM U_USER uu,U_USER_PRIVILIGE uup,U_PRIVILIGE up where uu.USER_ID=uup.USER_ID and
+	 uu.USER_ID=#{userId} and up.PRIVILEGE_ID=uup.PRIVILEGE_ID )UNION 
+	 (SELECT up.* FROM U_USER uu,U_USER_ROLE uur,U_ROLE ur,U_ROLE_PRIVILIGE urp,U_PRIVILIGE up where 
+	  uu.USER_ID=uur.USER_ID and
+	 uu.USER_ID=#{userId} and ur.ROLE_ID=uur.ROLE_ID and urp.ROLE_ID=ur.ROLE_ID and up.PRIVILEGE_ID=urp.PRIVILEGE_ID)UNION
+	 (SELECT up.* FROM U_USER uu, U_DEPARTMENT ud,U_DEPARTMENT_PRIVILIGE udp,U_PRIVILIGE up where
+	  uu.USER_ID=#{userId} and uu.DEPARTMENT_ID=ud.DEPARTMENT_ID and udp.DEPARTMENT_ID =ud.DEPARTMENT_ID
+	   and up.PRIVILEGE_ID = udp.PRIVILEGE_ID) UNION
+	(SELECT up.* FROM U_USER uu, U_DEPARTMENT ud,U_DEPARTMENT_ROLE udr,U_ROLE ur,U_ROLE_PRIVILIGE urp,U_PRIVILIGE up where
+	uu.USER_ID=#{userId} and uu.DEPARTMENT_ID=ud.DEPARTMENT_ID and udr.DEPARTMENT_ID =ud.DEPARTMENT_ID and ur.ROLE_ID = udr.ROLE_ID 
+	and urp.ROLE_ID=ur.ROLE_ID
+	  and up.PRIVILEGE_ID = urp.PRIVILEGE_ID)
+	  ]]>
+	</select>
+	<!-- 批量插入所有用户 -->
+	<insert id="insertUsers" parameterType="java.util.List">
+		<foreach collection="list" item="user" index="index" separator=";" close="; end;" open="begin">
+		insert into u_user(USER_ID, DEPARTMENT_ID, PASSWORD, EMPNAME, EMPNO, 
+						   STATUS, RANK, EMAIL, QQ, REGISTER_TIME,  LAST_LOGIN_TIME, MEMO) 
+	 		values(#{user.user_id,jdbcType=VARCHAR},#{user.department_id,jdbcType=VARCHAR},
+	 		#{user.password,jdbcType=VARCHAR},  #{user.empname,jdbcType=VARCHAR},
+	 		#{user.empno,jdbcType=VARCHAR},#{user.status,jdbcType=VARCHAR},
+	 		#{user.rank,jdbcType=VARCHAR},#{user.email,jdbcType=VARCHAR},
+	 		#{user.qq,jdbcType=VARCHAR},#{user.register_time,jdbcType=VARCHAR},
+	 		#{user.last_login_time,jdbcType=VARCHAR},#{user.memo,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	
+	<select id="checkUserPrivilege" resultType="com.model.authority.U_privilege">
+	<![CDATA[
+	select * from (
+		(SELECT up.* FROM U_USER_PRIVILIGE uup,U_PRIVILIGE up where uup.USER_ID=#{0} and up.PRIVILEGE_ID=uup.PRIVILEGE_ID )
+			UNION 
+		(SELECT up.* FROM U_USER_ROLE uur,U_ROLE ur,U_ROLE_PRIVILIGE urp,U_PRIVILIGE up where  uur.USER_ID=#{0} and ur.ROLE_ID=uur.ROLE_ID and urp.ROLE_ID=ur.ROLE_ID and up.PRIVILEGE_ID=urp.PRIVILEGE_ID)
+			UNION
+		(SELECT up.* FROM U_USER uu, U_DEPARTMENT ud,U_DEPARTMENT_PRIVILIGE udp,U_PRIVILIGE up where
+		  uu.USER_ID=#{0} and uu.DEPARTMENT_ID=ud.DEPARTMENT_ID and udp.DEPARTMENT_ID =ud.DEPARTMENT_ID and up.PRIVILEGE_ID = udp.PRIVILEGE_ID)
+			UNION
+		(SELECT up.* FROM U_USER uu, U_DEPARTMENT ud,U_DEPARTMENT_ROLE udr,U_ROLE ur,U_ROLE_PRIVILIGE urp,U_PRIVILIGE up where
+		uu.USER_ID=#{0} and uu.DEPARTMENT_ID=ud.DEPARTMENT_ID and udr.DEPARTMENT_ID =ud.DEPARTMENT_ID and ur.ROLE_ID = udr.ROLE_ID 
+		and urp.ROLE_ID=ur.ROLE_ID and up.PRIVILEGE_ID = urp.PRIVILEGE_ID)
+	) where PRIVILEGE_NAME=#{1}
+	]]>	
+	</select>
+	
+</mapper>

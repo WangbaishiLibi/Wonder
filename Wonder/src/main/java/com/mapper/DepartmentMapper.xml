@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.DepartmentMapper">
+	
+	<delete id="deleteDepartmentById">
+ 		delete from U_DEPARTMENT where DEPARTMENT_ID=#{department_id, jdbcType=VARCHAR}
+ 	</delete>
+	<select id="getAllDepartmentByPage" parameterType="Integer"  resultType="com.model.authority.U_department">
+		<![CDATA[
+			select * from (select rownum rn, db.* from (select * from U_DEPARTMENT order by DEPARTMENT_ID) db 
+			WHERE rownum<=(#{page}*20)) WHERE rn>=((#{page}-1)*20+1)
+		]]>
+	</select>
+	<select id="getAllDepartment" parameterType="Integer"  resultType="com.model.authority.U_department">
+		<![CDATA[
+			select * from U_DEPARTMENT order by DEPARTMENT_ID
+		]]>
+	</select>
+	
+	<select id="existDepartmentByCode"   resultType="com.model.authority.U_department">
+		<![CDATA[select * from U_DEPARTMENT where DEPARTMENT_CODE = #{department_code} ]]>
+	</select>
+	<select id="getDepartmentById"   resultType="com.model.authority.U_department">
+		<![CDATA[select * from U_DEPARTMENT where DEPARTMENT_ID = #{department_id} ]]>
+	</select>
+	
+	<select id="getDepartmentByKey"   resultType="com.model.authority.U_department">
+		<![CDATA[
+		select * from U_DEPARTMENT where DEPARTMENT_NAME LIKE #{key} order by DEPARTMENT_ID
+		]]>
+	</select>
+	
+	<select id="getDepartmentNameById"   resultType="String">
+		<![CDATA[
+		select DEPARTMENT_NAME from U_DEPARTMENT where DEPARTMENT_ID = #{department_id,jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<select id="getDepartmentBySuperiorId"   resultType="com.model.authority.U_department">
+		<![CDATA[select * from U_DEPARTMENT where SUPERIOR_DEPARTMENT_ID = #{superior_department_id} order by DEPARTMENT_ID]]>
+	</select>
+	
+	
+	<select id="getRoleByDepartmentId"   resultType="com.model.authority.U_role">
+		<![CDATA[
+		select ur.* from u_department ud, u_department_role udr, u_role ur where ud.department_id=udr.department_id
+			and udr.role_id = ur.role_id and ud.department_id = #{department_id,jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<select id="getPrivilegeByDepartmentId"   resultType="com.model.authority.U_privilege">
+		<![CDATA[
+		(select up.* from u_department ud, u_department_privilige udp, u_privilige up
+		where ud.department_id = udp.department_id and udp.privilege_id = up.privilege_id
+		  and ud.department_id = #{department_id,jdbcType=VARCHAR})
+		UNION
+		(select up.* from u_department ud, u_department_role udr,  u_role_privilige urp, u_privilige up
+		where ud.department_id = udr.department_id and udr.role_id = urp.role_id and urp.privilege_id = up.privilege_id
+		  and ud.department_id = #{department_id,jdbcType=VARCHAR})
+		]]>
+	</select>
+	
+	<select id="getPriviByDepartmentId"   resultType="com.model.authority.U_privilege">
+		<![CDATA[
+		(select up.* from u_department ud, u_department_privilige udp, u_privilige up
+		where ud.department_id = udp.department_id and udp.privilege_id = up.privilege_id
+		  and ud.department_id = #{department_id,jdbcType=VARCHAR})
+		]]>
+	</select>
+	
+	<select id="checkDepartmentRole"   resultType="com.model.authority.U_department">
+		<![CDATA[
+			select ud.* from u_department ud, u_department_role udr, u_role ur
+			where udr.role_id = ur.role_id
+			  and ud.department_id = udr.department_id
+			  and udr.department_id = #{0}
+			  and ur.role_name = #{1}
+		]]>
+	</select>
+	<select id="getDepByRole"   resultType="com.model.authority.U_department">
+		<![CDATA[
+			select ud.* from u_department ud, u_department_role udr, u_role ur
+			where udr.role_id = ur.role_id
+			  and ud.department_id = udr.department_id
+			  and ur.role_name = #{1}
+		]]>
+	</select>
+	
+	<update id="updateDepartment" parameterType="com.model.authority.U_department">
+		update U_DEPARTMENT set DEPARTMENT_NAME = #{department_name,jdbcType=VARCHAR},  DEPARTMENT_CODE = #{department_code,jdbcType=VARCHAR},
+			SUPERIOR_DEPARTMENT_ID = #{superior_department_id,jdbcType=VARCHAR}, CATEGORY = #{category,jdbcType=VARCHAR}
+		where DEPARTMENT_ID = #{department_id,jdbcType=VARCHAR}
+	</update>
+	
+	<insert id="insertDepartment">
+	<![CDATA[
+		insert into U_DEPARTMENT(DEPARTMENT_ID, DEPARTMENT_NAME, DEPARTMENT_CODE, SUPERIOR_DEPARTMENT_ID, CATEGORY, MEMO) 
+	 		values(#{department_id,jdbcType=VARCHAR},#{department_name,jdbcType=VARCHAR},
+	 		#{department_code,jdbcType=VARCHAR},#{superior_department_id,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},#{memo,jdbcType=VARCHAR})
+		
+	]]>
+	</insert>
+	
+	
+ 
+</mapper>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	var cnt = 5;
+	var inter = setInterval("countDown()", 1000);
+	function countDown(){
+		cnt--;
+		document.getElementById("cnt").innerHTML = cnt;
+		if(cnt<1){
+			window.location = "../res/index.html";
+		}
+	}
+
+</script>
+</head>
+<body>
+	糟糕，无法访问！<span id="cnt">5</span>秒后跳回主页...
+</body>
+</html>

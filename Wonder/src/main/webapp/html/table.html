@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数据管理</title>
+<link type="text/css" rel="stylesheet" href="../res/css/at-plg1.0.css">
+<link type="text/css" rel="stylesheet" href="../res/css/table-plg1.0.css">
+<script type="text/javascript" src="../res/js/jquery.min.js"></script>
+<script type="text/javascript" src="../res/js/WebUtil.js"></script>
+<script type="text/javascript" src="../res/js/table.js"></script>
+<script type="text/javascript" src="../res/js/table-plg1.0.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		
+	})
+
+</script>
+<style type="text/css">
+	
+</style>
+</head>
+<body>
+	<div class="container" style="margin-top: 100px;">
+		<div style="float:right">
+			<button id="btn_add" class="btn btn-primary"  data-toggle="modal" data-target="#addModal">新增</button>
+		</div>
+		<table id="table" class="table table-style1">
+			<thead></thead>
+			<tbody></tbody>
+			<tfoot></tfoot>
+		</table>
+	</div>
+	
+	<!-- 新增弹出框 -->
+	<div class="modal fade" id="addModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	    	<input type="hidden"  name="_method" value="POST">
+	    	<form name="add" class="form-horizontal">
+		    	<div class="modal-header">
+		        	<h4 class="modal-title">新增</h4>
+		      	</div>
+		      	<div class="modal-body">
+					<input type="hidden"  name="tbname">			
+		      	</div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        	<button type="button" class="btn btn-primary save" >保存</button>
+		      	</div>
+	      	</form>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- 修改弹出框 -->
+	<div class="modal fade" id="modifyModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		    <input type="hidden"  name="_method" value="PUT">
+	    	<form name="modify" class="form-horizontal">
+		    	<div class="modal-header">
+		        	<h4 class="modal-title">修改</h4>
+		      	</div>
+		      	<div class="modal-body">
+					<input type="hidden"  name="tbname">			
+		      	</div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        	<button type="button" class="btn btn-primary save" >保存</button>
+		      	</div>
+	      	</form>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- 删除弹出框 -->
+	<div class="modal fade" id="deleteModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	    	<input type="hidden"  name="_method" value="DELETE">
+	    	<form name="delete" class="form-horizontal">
+		    	<div class="modal-header">
+		        	<h4 class="modal-title">删除</h4>
+		      	</div>
+		      	<div class="modal-body">
+					<input type="hidden"  name="tbname">			
+		      	</div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        	<button type="button" class="btn btn-primary save" >保存</button>
+		      	</div>
+	      	</form>
+	    </div>
+	  </div>
+	</div>
+	
+	
+</body>
+</html>

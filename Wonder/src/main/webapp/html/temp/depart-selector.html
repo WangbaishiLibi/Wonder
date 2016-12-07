@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+	.depart_selector{max-height: 300px; overflow-y: scroll;}
+</style>
+<script type="text/javascript">
+	function initDepartSelector($dom){
+		web.initTree($dom.find(".depart_selector").eq(0)).on("select_node.jstree", function (e, data) {
+			$dom.find(".depart-selector input").eq(1).val(data.node.id);
+			$dom.find(".depart-selector input").eq(0).val(data.node.text);
+			$('.dropdown-toggle').dropdown("toggle");
+		});
+		
+		$(".depart_selector").click(function(){return false;})
+		$dom.find(".depart-selector input").eq(1).change(function(){
+			if(!$dom.find(".depart-selector input").eq(0).val())	setOption($dom, $(this).val());
+		})
+	}
+	
+	function setOption($dom, department_id){
+		var tree = $dom.find(".depart_selector").eq(0).jstree(true);
+		tree.deselect_all(true);
+		tree.select_node(tree.get_node({id: department_id}));
+	}
+</script>
+</head>
+<body>
+	<div class="input-group depart-selector">
+		<input type="text" readonly="readonly" name="department_name" class="form-control">
+		<input type="hidden" name="department_id" class="form-control">
+		<div class="input-group-btn">
+			<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+			<ul class="dropdown-menu" role="menu">
+				<li><div class="depart_selector"></div></li>
+	        </ul>
+	  	</div>
+	</div>
+</body>
+</html>

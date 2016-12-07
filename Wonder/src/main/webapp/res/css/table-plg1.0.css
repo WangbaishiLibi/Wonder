@@ -1,0 +1,29 @@
+/*
+ * table-plug1.0.css
+ * require : bootstrap
+ */
+
+table > thead > tr > th,
+table > tbody > tr > td{text-align : center;}
+
+table > thead > tr > th{color: white;}
+
+.table-style1 > thead > tr{background : #0262B5;}
+
+.table-style1 > tbody > tr:nth-child(odd){background : #d9edf7;}
+
+.table-style1 > tbody > tr:hover{background : #DFF0D8;}
+
+.table-style1 > tbody > tr > td span{cursor: pointer}
+.table-style1 > tbody > tr > td span:hover{color: blue; border-bottom: 1px solid blue;}
+
+
+.table > tfoot > tr > td .info{margin: 20px 0px; line-height: 34px; color: #337ab7;}
+
+
+
+
+
+
+
+

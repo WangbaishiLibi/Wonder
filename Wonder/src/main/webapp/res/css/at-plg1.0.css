@@ -1,0 +1,74 @@
+/*
+ * at-plugin css
+ * version: 1.0
+ */
+.at{
+	position: fixed;
+	background-color: rgba(238, 238, 238, 0.9);
+	width: 500px;
+	height: 300px;
+	top: 50%;
+	left: 50%;
+	margin-left: -250px;
+	margin-top: -150px;
+	color: black;
+	font-family: "微软雅黑";
+	font-size: 14px;
+	z-index: 1999;
+	border: #bbb 1px solid;
+}
+.at .at_title{
+	width: 100%;
+	height: 30px;		
+	background-color: #005;
+    color: white;			
+}
+.at .at_title .at_title_label{
+	 text-align: center; 
+	 padding: 6px 4px;
+	 font-size: 16px;
+}
+.at .at_title .at_title_btns{
+	width: 32px;
+    height: 30px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border-left: solid 2.5px #2952CE;
+}
+.at .at_title .at_btn_close{
+	width: 100%; 
+	height: 100%; 
+	font-size: 22px; 
+	color: white; 
+	background-color: #005; 
+	border: none;
+}
+.at .at_content{
+	width: 100%;
+	height : 270px;   
+}
+.at .at_content .at_content_label{
+	width : 100%;
+	vertical-align:middle;
+	display:table-cell;  
+	text-align: center;
+	word-break: break-all;
+	padding: 10px;
+}
+.at .at_btns{
+	width: 160px;
+	margin: 0px auto;
+}
+.at .at_btns button{
+	width: 60px;
+	height: 24px;
+	background-color: #005;
+	border: solid 1.5px #A6B8EC;
+	color: white;
+	font-family: "微软雅黑";
+}
+.at .at_btns button:hover{
+	background-color: #2828FF;
+	
+}

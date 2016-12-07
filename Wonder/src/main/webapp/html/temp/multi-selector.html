@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+	.multi-selector{margin: 2px 4px}
+	.multi-selector .list-group-item{padding: 3px 10px;}
+	.multi-selector .list-group{height: 200px; padding-right: 0px; margin-bottom: 0px; overflow-y: scroll; background-color: #ddd;}
+	.multi-selector .mid-funs .btn{margin: 30px 5%;}
+</style>
+<script type="text/javascript">
+	function initMultiSelector($dom){
+		$(document).on("click", "#"+$dom.attr("id")+" .list-group-item", function(){
+			$(this).toggleClass("active");
+		})
+
+		$dom.find(".mid-funs .remove").click(function(){
+			var lis = $dom.find(".right-part").find(".active").clone(true);
+			$dom.find(".right-part .active").remove();
+			lis.removeClass("active");
+			$dom.find(".left-part").append(lis);
+		})
+		
+		$dom.find(".mid-funs .add").click(function(){
+			var lis = $dom.find(".left-part").find(".active").clone(true);
+			$dom.find(".left-part .active").remove();
+			lis.removeClass("active");
+			$dom.find(".right-part").append(lis);
+		})
+	}
+	
+</script>
+</head>
+<body>
+	<div class="multi-selector row" >
+		<ul class="left-part list-group col-sm-5">
+<!-- 			<li class="list-group-item">12</li> -->
+<!-- 			<li class="list-group-item active">12</li> -->
+		</ul>
+		<div class="mid-funs col-sm-2">
+			<div class="btn btn-default remove" ><span class="glyphicon glyphicon-chevron-left"></span></div>
+			<div class="btn btn-default add" ><span class="glyphicon glyphicon-chevron-right"></span></div>
+		</div>
+		<ul class="right-part list-group col-sm-5">
+		</ul>
+	</div>
+</body>
+</html>

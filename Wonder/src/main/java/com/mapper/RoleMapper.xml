@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.RoleMapper">
+	
+	
+	<select id="getAllRole"   resultType="com.model.authority.U_role">
+		<![CDATA[select * from U_ROLE]]>
+	</select>
+	
+	<select id="getRoleById"   resultType="com.model.authority.U_role">
+		<![CDATA[select * from U_ROLE where ROLE_ID = #{role_id,jdbcType=VARCHAR}]]>
+	</select>
+	
+	<update id="updateRole" parameterType="com.model.authority.U_role">
+	<![CDATA[
+		update U_ROLE set ROLE_NAME = #{role_name,jdbcType=VARCHAR}, DISPLAY_NAME = #{display_name,jdbcType=VARCHAR}, MEMO = #{memo,jdbcType=VARCHAR}
+		where ROLE_ID = #{role_id,jdbcType=VARCHAR}
+	]]>
+	</update>
+	
+	<insert id="insertRole" parameterType="com.model.authority.U_role">
+	<![CDATA[
+		insert into U_ROLE(ROLE_ID, ROLE_NAME, DISPLAY_NAME, MEMO) 
+		values(#{role_id,jdbcType=VARCHAR},#{role_name,jdbcType=VARCHAR},#{display_name,jdbcType=VARCHAR},#{memo,jdbcType=VARCHAR})
+		
+	]]>
+	</insert>
+ 
+ 	<select id="getAllAuthorityByRoleId" resultType="com.model.authority.U_privilege">
+ 		select up.* from U_ROLE ur, U_ROLE_PRIVILIGE urp, U_PRIVILIGE up where ur.ROLE_ID = #{role_id,jdbcType=VARCHAR}
+ 			and ur.ROLE_ID = urp.ROLE_ID and urp.PRIVILEGE_ID = up.PRIVILEGE_ID
+ 	</select>
+ 
+ 	<delete id="deleteRoleById">
+ 		delete from U_ROLE where role_id=#{role_id, jdbcType=VARCHAR}
+ 	</delete>
+ 
+</mapper>
