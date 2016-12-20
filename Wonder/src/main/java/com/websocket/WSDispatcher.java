@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 
 @Component
-public class WSDispacher implements ApplicationListener<ContextRefreshedEvent>{
+public class WSDispatcher implements ApplicationListener<ContextRefreshedEvent>{
 
 	@Autowired  
 	private RequestMappingHandlerMapping requestMappingHandlerMapping;

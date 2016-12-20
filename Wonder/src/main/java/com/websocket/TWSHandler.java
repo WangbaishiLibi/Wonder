@@ -17,7 +17,7 @@ public class TWSHandler extends TextWebSocketHandler{
 	private final String charset = "UTF-8";
 	
 	@Autowired
-	private WSDispacher wsDispacher;
+	private WSDispatcher wsDispacher;
 	
 
 	@Override
