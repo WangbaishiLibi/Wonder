@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>购票窗口</title>
+<link type="text/css" rel="stylesheet" href="../res/css/at-plg1.0.css">
+<script type="text/javascript" src="../res/js/jquery.min.js"></script>
+<script type="text/javascript" src="../res/js/WebUtil.js"></script>
+<script type="text/javascript" src="../res/js/ws_client.js"></script>
+<script type="text/javascript" src="../res/js/table-plg1.0.js"></script>
+</head>
+<body>
+
+	<div class="container" style="margin-top: 100px;">
+		<div style="float:right">
+			剩余票数：<label id="free"></label>
+		</div>
+		<table id="table" class="table table-style1">
+			<thead></thead>
+			<tbody></tbody>
+			<tfoot></tfoot>
+		</table>
+	</div>
+
+
+	<script type="text/javascript">
+	$(function(){
+		init();
+		
+		$(document).on("click", ".op_get", function(){
+			var tid = $(this).attr("rowid");
+			$.getJSON(web.basePath+"ticket/purchase", function(data){
+				console.log(data);
+			})
+		})
+		
+		refresh();
+		setInterval("refresh()", 3000);
+	});
+	var	table;
+	function init(){
+		table = new DataTable({
+			tabledom : $("#table"),
+			ajax : {url:web.basePath+"ticket/allTickets"},
+			columns : [
+			    {name : "编号号", field : "id"},       
+				{name : "电影", field : "film"},
+				{name : "开始时间", field : function(row){
+					return new Date(row.releaseTime).Format("yyyy-MM-dd hh:mm:ss");
+				}},
+				{name : "状态", field : "status"},
+				{name : "操作", field : function(row){
+					if(row.status == "待售")
+						return '<span rowid="'+row.id+'" class="op_get btn btn-primary glyphicon glyphicon-edit">抢票</span>';
+					else
+						return '';
+				}}
+			],
+			page : {
+				page_index : 1,		
+				page_total : 10	//每页记录数
+			}
+		});
+	}
+	
+
+	function refresh(){
+		wsClient.send("/msg/countTicket", {}, function(data){
+			$("#free").text(data);
+		})
+	}
+	
+	</script>
+</body>
+</html>
