@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -26,33 +27,35 @@ public class TWSHandler extends TextWebSocketHandler{
 		// TODO Auto-generated method stub
 		System.out.println("===========>handlerText");
 		String msg = message.getPayload();
-		Object result = null;
+		JSONObject result = null;
 		
+
 
 		Object stamp = null;	//时间戳，用来标识返回结果
 		Pattern pattern = Pattern.compile("^\\{(\"\\w+\":\\S+,{0,1})+\\}$");
 		if(pattern.matcher(msg).matches()){
 			JSONObject json = JSONObject.fromObject(message.getPayload());
 			stamp = json.get("stamp");
-			result = wsDispacher.dispatch(json);
+			result = wsDispacher.dispatch(json, session);
 		}
 		
-		
-		if(result == null)	result = "404";
-		if(stamp != null){
-			result = String.valueOf(result) + "?" + stamp;
+		String response = "";
+		if(result == null)	response = "404";
+		else{
+			result.put("stamp", stamp);
+			response = String.valueOf(result);
 		}
-		session.sendMessage(new TextMessage(String.valueOf(result).getBytes(charset)));		
+		session.sendMessage(new TextMessage(response.getBytes(charset)));		
 
 	}
+	
 	
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session)
-			throws Exception {
+	public void afterConnectionClosed(WebSocketSession session,
+			CloseStatus status) throws Exception {
 		// TODO Auto-generated method stub
-		super.afterConnectionEstablished(session);
+		super.afterConnectionClosed(session, status);
+		WSServer.instance().disconnect(session);
 	}
-	
-
 	
 }

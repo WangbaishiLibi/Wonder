@@ -61,7 +61,7 @@ public class RealmUtil extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
 		String name = token.getUsername();
 		User user = new User();
-		user.setId("001");
+		user.setId(1);
 		user.setName("admin");
 		user.setPassword("123");
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getId(), user.getPassword(), this.getName());

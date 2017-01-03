@@ -11,6 +11,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.socket.WebSocketSession;
 
 
 @Component
@@ -60,13 +61,22 @@ public class WSDispatcher implements ApplicationListener<ContextRefreshedEvent>{
 	 * 接口分发
 	 * 注意：参数只匹配第一项
 	 */
-	public Object dispatch(String url, Object parameter){
+	public Object dispatch(String url, Object parameter, WebSocketSession session){
 		HandlerMethod method = getHandlerMethod(url);		
 		if(method != null){
 			try{
 				Class<?> cls = method.getMethod().getDeclaringClass();
 				
-	        	return method.getMethod().invoke(cls.newInstance(), parameter);
+				Object[] args = new Object[method.getMethod().getParameterCount()];
+				Class<?>[] argTypes = method.getMethod().getParameterTypes();
+				for(int i=0; i<args.length; i++){
+					if(argTypes[i].equals(Map.class))	args[i] = parameter;
+					else if(argTypes[i].equals(WebSocketSession.class))	args[i] = session;
+				}
+				if(args.length == 0)
+					return method.getMethod().invoke(cls.newInstance());
+				else
+					return method.getMethod().invoke(cls.newInstance(), args);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -78,8 +88,10 @@ public class WSDispatcher implements ApplicationListener<ContextRefreshedEvent>{
 	 * 接口分发
 	 * 注意：json参数必须包含url和params
 	 */
-	public Object dispatch(JSONObject json){
-		
-		return dispatch(String.valueOf(json.get("url")), json.get("params"));
+	public JSONObject dispatch(JSONObject json, WebSocketSession session){
+		Object response = dispatch(String.valueOf(json.get("url")), json.get("params"), session);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("data", response);
+		return jsonObj;
 	}
 }

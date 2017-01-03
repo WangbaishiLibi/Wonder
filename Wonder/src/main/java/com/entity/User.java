@@ -1,15 +1,36 @@
 package com.entity;
 
-public class User {
+import java.io.Serializable;
 
-	private String id;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+
+@SuppressWarnings("serial")
+@PersistenceCapable(table="u_user")
+public class User implements Serializable{
+
+
+	@PrimaryKey  
+    @Column(name="userid")
+	@Persistent(valueStrategy=IdGeneratorStrategy.NATIVE)
+    protected long id;
+	
+	@Column(name="username")
 	private String name;
+	
+	@Column(name="password")
 	private String password;
 	
-	public String getId() {
+	
+	
+	public long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {

@@ -43,6 +43,7 @@ public class MainInterceptor implements HandlerInterceptor{
 		LogUtil.console("interceptor handler", handler.toString());
 		boolean result = true;
 		String tokenId = "001";
+		if(request.getRequestURI().contains("Wonder"))	return true;
 		
 		//过滤(全匹配，只要包含)
 		for(String path : unauth_path){

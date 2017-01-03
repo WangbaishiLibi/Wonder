@@ -34,6 +34,7 @@ http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 	<context:component-scan base-package="com.websocket"/>
 	<context:component-scan base-package="com.websocket.controller"/>
 	
+	
 	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
@@ -110,19 +111,19 @@ http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 	
 	
 	<!-- 异常处理 -->
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">		  	   	
-	   	<!-- 定义需要特殊处理的异常，用类名或完全路径名作为key，异常页名作为值 -->  
-	   	<property name="exceptionMappings">  
-	       <props>  
-				<prop key="java.lang.Exception">error</prop>    
-				<prop key="java.lang.Throwable">error</prop>
-	        </props>  
-	    </property>  
-    	<!-- 定义默认的异常处理页面，当该异常类型的注册时使用 -->  
-	   	<property name="defaultErrorView" value="/error.html"></property>  
-	   	<!-- 定义异常处理页面用来获取异常信息的变量名，默认名为exception -->  
-	   	<property name="exceptionAttribute" value="ex"></property>  
-	</bean>
+<!-- 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">		  	   	 -->
+<!-- 	   	定义需要特殊处理的异常，用类名或完全路径名作为key，异常页名作为值   -->
+<!-- 	   	<property name="exceptionMappings">   -->
+<!-- 	       <props>   -->
+<!-- 				<prop key="java.lang.Exception">error</prop>     -->
+<!-- 				<prop key="java.lang.Throwable">error</prop> -->
+<!-- 	        </props>   -->
+<!-- 	    </property>   -->
+<!--     	定义默认的异常处理页面，当该异常类型的注册时使用   -->
+<!-- 	   	<property name="defaultErrorView" value="/error.html"></property>   -->
+<!-- 	   	定义异常处理页面用来获取异常信息的变量名，默认名为exception   -->
+<!-- 	   	<property name="exceptionAttribute" value="ex"></property>   -->
+<!-- 	</bean> -->
 	
 	<!-- 注入properties的值 -->
 	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
