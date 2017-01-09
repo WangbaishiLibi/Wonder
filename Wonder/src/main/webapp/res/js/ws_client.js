@@ -93,5 +93,5 @@ WSClient.fn.send = function(url, params, _calback){
 }
 
 var wsClient = new WSClient({
-	"uri" : "ws://192.168.1.102:8088/Wonder/main"
+	"uri" : "ws://192.168.1.102:8080/Wonder/main"
 });

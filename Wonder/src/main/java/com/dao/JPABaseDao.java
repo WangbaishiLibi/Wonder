@@ -7,17 +7,12 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Repository;
-
-import com.entity.Ticket;
 import com.util.Page;
 
 
 
 @Repository
-@Configurable
 public class JPABaseDao {
 
 	PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("Tutorial");

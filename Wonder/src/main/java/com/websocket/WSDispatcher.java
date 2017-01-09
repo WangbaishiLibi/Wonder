@@ -3,6 +3,7 @@ package com.websocket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import net.sf.json.JSONObject;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.socket.WebSocketSession;
+import com.util.SpringContextUtil;
 
 
 @Component
@@ -62,10 +64,13 @@ public class WSDispatcher implements ApplicationListener<ContextRefreshedEvent>{
 	 * 注意：参数只匹配第一项
 	 */
 	public Object dispatch(String url, Object parameter, WebSocketSession session){
+		
 		HandlerMethod method = getHandlerMethod(url);		
 		if(method != null){
 			try{
 				Class<?> cls = method.getMethod().getDeclaringClass();
+				
+				Object controllerObj = SpringContextUtil.getBean(cls);
 				
 				Object[] args = new Object[method.getMethod().getParameterCount()];
 				Class<?>[] argTypes = method.getMethod().getParameterTypes();
@@ -74,9 +79,9 @@ public class WSDispatcher implements ApplicationListener<ContextRefreshedEvent>{
 					else if(argTypes[i].equals(WebSocketSession.class))	args[i] = session;
 				}
 				if(args.length == 0)
-					return method.getMethod().invoke(cls.newInstance());
+					return method.getMethod().invoke(controllerObj);
 				else
-					return method.getMethod().invoke(cls.newInstance(), args);
+					return method.getMethod().invoke(controllerObj, args);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

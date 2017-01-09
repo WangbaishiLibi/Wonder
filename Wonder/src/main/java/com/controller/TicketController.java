@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,8 +36,8 @@ public class TicketController {
 	}
 	
 	
-	@RequestMapping("/purchase")
-	public @ResponseBody Object purchase(long ticketid){
+	@RequestMapping("/purchase/{ticketid}")
+	public @ResponseBody Object purchase(@PathVariable("ticketid")long ticketid){
 		return ticketService.purchaseTicket(1, ticketid);
 	}
 	

@@ -2,12 +2,11 @@ package com.service;
 
 import java.util.Date;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
-
 import com.dao.JPABaseDao;
 import com.entity.Purchase;
 import com.entity.Ticket;
@@ -15,11 +14,10 @@ import com.entity.User;
 import com.util.Page;
 
 @Service
-@Configurable
 public class TicketService {
 	
 	@Autowired
-	private JPABaseDao jpa = new JPABaseDao();
+	private JPABaseDao jpa;
 	
 	
 	public Object getAllTicket(){
@@ -39,15 +37,18 @@ public class TicketService {
 	
 	public synchronized boolean purchaseTicket(long uid, long ticketid){
 		Transaction tx = jpa.begin();
-		User user = jpa.getPM().getObjectById(User.class, uid);
-		Ticket ticket = jpa.getPM().getObjectById(Ticket.class, ticketid);
+		PersistenceManager pm = jpa.getPM();
+		User user = pm.getObjectById(User.class, uid);
+		Ticket ticket = pm.getObjectById(Ticket.class, ticketid);
 		
-		if(!"待售".equals(ticket.getStatus()))	
+		if(!"待售".equals(ticket.getStatus())){
+			jpa.commit(tx);
 			return false;
+		}
+		ticket.setStatus("已售");	
 		
-		Purchase purchase = new Purchase(user, ticket, new Date());
-		ticket.setStatus("已售");
-		jpa.getPM().makePersistent(purchase);
+		Purchase purchase = new Purchase(user, ticket, new Date());		
+		pm.makePersistent(purchase);
 		return jpa.commit(tx);
 	}
 	

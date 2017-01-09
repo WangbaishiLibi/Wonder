@@ -20,7 +20,7 @@ public class MessageController {
 
 	
 	@Autowired
-	private TicketService ticketService = new TicketService();
+	private TicketService ticketService;
 	
 
 

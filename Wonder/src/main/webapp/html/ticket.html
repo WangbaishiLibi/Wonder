@@ -29,13 +29,18 @@
 		
 		$(document).on("click", ".op_get", function(){
 			var tid = $(this).attr("rowid");
-			$.getJSON(web.basePath+"ticket/purchase", function(data){
-				console.log(data);
+			$.getJSON(web.basePath+"ticket/purchase/"+tid, function(data){
+				if(data){
+					alert("抢票成功！");
+					table.reload();
+				}else{
+					alert("抢票失败，该票可能已被购买。");
+				}
 			})
 		})
 		
-		refresh();
-		setInterval("refresh()", 3000);
+	//	refresh();
+	//	setInterval("refresh()", 3000);
 	});
 	var	table;
 	function init(){
@@ -43,9 +48,9 @@
 			tabledom : $("#table"),
 			ajax : {url:web.basePath+"ticket/allTickets"},
 			columns : [
-			    {name : "编号号", field : "id"},       
+			    {name : "编号", field : "id"},       
 				{name : "电影", field : "film"},
-				{name : "开始时间", field : function(row){
+				{name : "放映时间", field : function(row){
 					return new Date(row.releaseTime).Format("yyyy-MM-dd hh:mm:ss");
 				}},
 				{name : "状态", field : "status"},
